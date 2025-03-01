@@ -20,28 +20,24 @@ const updateEmployee = (employee) => ({
 
 // Async Thunks
 export const fetchEmployees = () => async (dispatch) => {
-  try {
-    const response = await fetch('/api/employees')
-    if(response.ok){
+
+  const response = await fetch('/api/employees')
+  if (response.ok) {
     const data = await response.json();
     dispatch(setEmployees(data));
-  }else{
+  } else {
     console.log('its the get')
   }
 };
 
-export const submitEmployee = (userId, option, shiftWorked, optionalText) => async (dispatch) => {
-  try {
-    const response = await fetch('/api/employees/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ option, shift_worked: shiftWorked, optional_text: optionalText,user_id: userId }),
-  )  });
-  
-    if(response.ok){
-      dispatch(submitEmployee(userId, shiftWorked,optionalText,option)
+// export const submitEmployee = (userId, option, shiftWorked, optionalText) => async (dispatch) => {
 
-    }
+//   const response = await fetch('/api/employees/submit', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({ option, shift_worked: shiftWorked, optional_text: optionalText, user_id: userId }),
+//   }
+
 
 // Initial State
 const initialState = {};
