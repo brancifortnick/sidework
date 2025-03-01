@@ -1,8 +1,10 @@
 from flask import Flask, Blueprint, jsonify,request,render_template
 from flask_login import login_required
 from app.models import User,db, Employee
-from wtforms import FlaskForm
+from flask_wtf import FlaskForm
 from app.forms.employee_form import EmployeeForm
+
+
 employee_routes = Blueprint('employees', __name__)
 
 @employee_routes.route('/submit', methods=['POST'])
@@ -14,8 +16,9 @@ def submit_choice():
         new_choice = Employee(
             option=form.option.data,
             optional_text=form.optional_text.data,
-            shift_worked=form.shift_worked.data
-        )
+            shift_worked=form.shift_worked.data,
+            user_id=form.user_id.data        
+            )
         db.session.add(new_choice)
         db.session.commit()
         return jsonify(new_choice.to_dict()), 201

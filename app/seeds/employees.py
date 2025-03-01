@@ -5,22 +5,26 @@ def seed_employees():
     nicholas = Employee(
         option='A', 
         optional_text='First choice comment', 
-        shift_worked='Morning Shift'
+        shift_worked='Morning Shift',
+        user_id=1
     )
     marnie = Employee(
         option='B', 
         optional_text='Second choice comment', 
-        shift_worked='Mid Shift'
+        shift_worked='Mid Shift',
+        user_id=2
     )
     bobbie = Employee(
         option='B', 
         optional_text='Third choice comment', 
-        shift_worked='Night Shift'
+        shift_worked='Night Shift',
+        user_id=3
     )
     phillip = Employee(
         option='C',
         optional_text='all sidework completed',
-        shift_worked='Night Shift'
+        shift_worked='Night Shift',
+        user_id=4
     )
 
     db.session.add(nicholas)

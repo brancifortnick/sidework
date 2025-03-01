@@ -1,18 +1,27 @@
 import React from "react";
 import { NavLink, useHistory, useParams } from "react-router-dom";
-import LogoutButton from "../auth/LogoutButton";
-import { useDispatch, useSelector } from "react-redux";
-import { demoLogin } from "../../store/session";
+import { demoLogin } from "../store/session";
+import LogoutButton from "./auth/LogoutButton";
+import { useDispatch,useSelector} from "react-redux";
 
-
-const demoFunction = async (e) => {
-  e.preventDefault();
-  dispatch(demoLogin());
-  history.push("/");
-};
 
 
 const NavBar = () => {
+
+const history = useHistory()
+const dispatch = useDispatch()
+const user = useSelector((state) => state.session.user);
+
+
+  const demoFunction = async (e) => {
+    e.preventDefault();
+    dispatch(demoLogin());
+    history.push("/");
+  };
+  
+  
+
+
   return (
     <nav>
         {!user ? (
