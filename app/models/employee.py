@@ -8,7 +8,7 @@ class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     option = db.Column(db.String(50), nullable=False)
     optional_text = db.Column(db.String(200), nullable=True)
-    shift_worked = db.Column(db.String(50),nullable=False)
+    shift_worked = db.Column(db.String(50), nullable=False)
     
     
     def to_dict(self):

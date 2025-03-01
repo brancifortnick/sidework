@@ -1,26 +1,34 @@
-from flask import Blueprint, jsonify,request,render_template
+from flask import Flask, Blueprint, jsonify,request,render_template
 from flask_login import login_required
 from app.models import User,db, Employee
 
 employee_routes = Blueprint('employees', __name__)
 
-
-
-@employee_routes('/api/choice/submit', methods=['POST'])
+@employee_routes.route('/submit', methods=['POST'])
 def submit_choice():
-    data = request.get_json()
-    option = data.get('option')
-    optional_text = data.get('optional_text', '')
-    
-    new_choice = EmployeeChoice(option=option, optional_text=optional_text)
-    db.session.add(new_choice)
-    db.session.commit()
-    
-    return jsonify(new_choice.to_dict()), 
+    form = EmployeeForm(data=request.json)
+    if form.validate():
+        new_choice = Employee(option=form.option.data, optional_text=form.optional_text.data, shift_worked=form.shift_worked.data)
+        db.session.add(new_choice)
+        db.session.commit()
+        return jsonify(new_choice.to_dict()), 201
+    return jsonify({'errors': form.errors}), 400
 
-
-@employee_routes.route('/api/choice', methods=['GET'])
-@login_required
+@employee_routes.route('/', methods=['GET'])
 def get_choices():
     choices = Employee.query.all()
     return jsonify([choice.to_dict() for choice in choices])
+
+# @employee_routes('/api/employees/submit', methods=['POST'])
+# def submit_choice():
+#     data = request.get_json()
+#     option = data.get('option')
+#     optional_text = data.get('optional_text', '')
+    
+#     new_choice = Employee(option=option, optional_text=optional_text)
+#     db.session.add(new_choice)
+#     db.session.commit()
+    
+#     return jsonify(new_choice.to_dict()), 
+
+

@@ -1,11 +1,27 @@
+import React from "react";
+import { NavLink, useHistory, useParams } from "react-router-dom";
+import LogoutButton from "../auth/LogoutButton";
+import { useDispatch, useSelector } from "react-redux";
+import { demoLogin } from "../../store/session";
 
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import LogoutButton from './auth/LogoutButton';
+
+const demoFunction = async (e) => {
+  e.preventDefault();
+  dispatch(demoLogin());
+  history.push("/");
+};
+
 
 const NavBar = () => {
   return (
     <nav>
+        {!user ? (
+        <div>
+          <button id="demo-button" onClick={demoFunction}>
+            Demo
+          </button>
+        </div>
+      ) : null}
       <ul>
         <li>
           <NavLink to='/' exact={true} activeClassName='active'>
@@ -30,6 +46,7 @@ const NavBar = () => {
         <li>
           <LogoutButton />
         </li>
+      
       </ul>
     </nav>
   );
