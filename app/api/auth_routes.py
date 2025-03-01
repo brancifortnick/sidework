@@ -17,6 +17,18 @@ def validation_errors_to_error_messages(validation_errors):
             errorMessages.append(f'{field} : {error}')
     return errorMessages
 
+"""
+below function to login using demo/guest button
+"""
+
+@auth_routes.route('/demo', methods=['POST'])
+def demo():
+    """
+    Logs a user in as demo user
+    """
+    user = User.query.filter_by(username="Demo").first()
+    login_user(user)
+    return user.to_dict()
 
 @auth_routes.route('/')
 def authenticate():

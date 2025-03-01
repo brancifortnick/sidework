@@ -7,8 +7,15 @@ const setUser = (user) => ({
   payload: user
 });
 
-const removeUser = () => ({
+const demo = (user) => ({
+  type: SET_USER,
+  payload: user,
+
+})
+
+const removeUser = (user) => ({
   type: REMOVE_USER,
+  payload: user,
 })
 
 const initialState = { user: null };
@@ -24,7 +31,7 @@ export const authenticate = () => async (dispatch) => {
     if (data.errors) {
       return;
     }
-  
+
     dispatch(setUser(data));
   }
 }
@@ -40,8 +47,8 @@ export const login = (email, password) => async (dispatch) => {
       password
     })
   });
-  
-  
+
+
   if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data))
@@ -54,8 +61,20 @@ export const login = (email, password) => async (dispatch) => {
   } else {
     return ['An error occurred. Please try again.']
   }
-
 }
+export const demoLogin = () => async (dispatch) => {
+  const response = await fetch("/api/auth/demo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const demoUser = await response.json();
+  dispatch(setUser(demoUser));
+};
+
+
+
 
 export const logout = () => async (dispatch) => {
   const response = await fetch('/api/auth/logout', {
@@ -82,7 +101,7 @@ export const signUp = (username, email, password) => async (dispatch) => {
       password,
     }),
   });
-  
+
   if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data))
