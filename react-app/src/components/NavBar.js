@@ -53,6 +53,11 @@ const user = useSelector((state) => state.session.user);
           </NavLink>
         </li>
         <li>
+          <NavLink to='/employees/submit' exact={true} activeClassName='active'>
+            Employees Log
+          </NavLink>
+        </li>
+        <li>
           <LogoutButton />
         </li>
       

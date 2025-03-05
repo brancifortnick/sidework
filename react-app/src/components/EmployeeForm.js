@@ -9,26 +9,19 @@ function EmployeeForm() {
     const [optionalText, setOptionalText] = useState('');
 
     const dispatch = useDispatch();
-    const history = useHistory()
-    const user = useSelector(state => state.session.user)
+    const history = useHistory();
+    const user = useSelector(state => state.session.user);
+
     const onSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("option", option);
-        formData.append('shiftWorked', setShiftWorked)
-        formData.append('optionalText', optionalText)
-
-        const res = await fetch("/api/employees/submit", {
-            method: "POST",
-            body: formData,
-        });
+        const res = await dispatch(submitEmployee(user.id, option, shiftWorked, optionalText));
         if (res.ok) {
-            const data = await data.json
-            dispatch(submitEmployee(data,user.id));
+            console.log(res, "data coming from employeeform");
+  
+        } else {
+            console.log('Error submitting employee');
         }
-        history.push(`/users/${user.id}`);
     };
-
 
     return (
         <>
@@ -53,10 +46,9 @@ function EmployeeForm() {
 
                 <button
                     type="submit"
-                 
                     style={{ marginTop: '10px', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', cursor: 'pointer' }}
                 >
-
+                    Submit
                 </button>
             </form>
         </>

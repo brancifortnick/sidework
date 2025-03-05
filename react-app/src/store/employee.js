@@ -20,43 +20,55 @@ const updateEmployee = (employee) => ({
 
 // Async Thunks
 export const fetchEmployees = () => async (dispatch) => {
-
-  const response = await fetch('/api/employees')
+  const response = await fetch('/api/employee');
   if (response.ok) {
     const data = await response.json();
     dispatch(setEmployees(data));
   } else {
-    console.log('its the get')
+    console.log('its the get');
   }
 };
 
-// export const submitEmployee = (userId, option, shiftWorked, optionalText) => async (dispatch) => {
+export const submitEmployee = (userId, option, shiftWorked, optionalText) => async (dispatch) => {
+  const response = await fetch('/api/employees/submit', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({option, shiftWorked, optionalText, userId }),
+  });  console.log(response, "response in employee store");
+  if (response.ok) {
+  
+    const data = await response.json();
+    dispatch(addEmployee(data));
 
-//   const response = await fetch('/api/employees/submit', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ option, shift_worked: shiftWorked, optional_text: optionalText, user_id: userId }),
-//   }
-
+  } else {
+    console.log('post in employee store error');
+  }
+};
 
 // Initial State
-const initialState = {};
+
+
+
 
 // Reducer
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-    case SET_EMPLOYEES:
-      return { ...state, employees: action.payload };
-    case ADD_EMPLOYEE:
-      return { ...state, employees: [...state.employees, action.payload] };
-    case UPDATE_EMPLOYEE:
-      return {
-        ...state,
-        employees: state.employees.map((employee) =>
-          employee.id === action.payload.id ? action.payload : employee
-        ),
-      };
-    default:
-      return state;
+
+  const initialState = {};
+  export default function reducer(state = initialState, action) {
+    switch (action.type) {
+      case SET_EMPLOYEES:
+        let newState = {};
+        action.payload.forEach((employee) => {
+          newState[employee.id] = employee;
+        });
+        return newState;
+      case ADD_EMPLOYEE:
+        const addState = { ...state };
+        addState[action.payload.id] = action.payload;
+        return addState;
+  
+      default:
+        return state;
+    }
   }
-}

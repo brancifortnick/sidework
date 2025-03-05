@@ -41,7 +41,7 @@ function App() {
         <ProtectedRoute path='/users/:userId' exact={true}>
           <User />
         </ProtectedRoute>
-        <ProtectedRoute path='/employees' exact={true}>
+        <ProtectedRoute path='/employees/submit' exact={true}>
           
           <EmployeeForm />
         </ProtectedRoute>

@@ -7,23 +7,47 @@ from app.forms.employee_form import EmployeeForm
 
 employee_routes = Blueprint('employees', __name__)
 
+# @employee_routes.route('/submit', methods=['POST'])
+# def submit_choice():
+#     data = request.get_json()  # Get JSON data from the request
+#     form = EmployeeForm(data=data)  # Pass data to the form
+    
+#     if form.validate_on_submit():  # Check form validation
+#         new_choice = Employee(
+#             option=form.option.data,
+#             optional_text=form.optional_text.data,
+#             shift_worked=form.shift_worked.data,
+#             user_id=form.user_id.data        
+#             )
+#         db.session.add(new_choice)
+#         db.session.commit()
+#         return jsonify(new_choice.to_dict()), 201
+    
+#     return jsonify({'errors': form.errors}), 400
+
+
+
+@employee_routes.route('/')
+@login_required
+def get_employees():
+    employees = Employee.query.all()
+    return {'employees': [employee.to_dict() for employee in employees]}
+
 @employee_routes.route('/submit', methods=['POST'])
-def submit_choice():
-    data = request.get_json()  # Get JSON data from the request
-    form = EmployeeForm(data=data)  # Pass data to the form
+@login_required
+def create_location():
+    workcompleted = Employee(
+        option=request.form['option'],
+        optional_text=request.form['optional_text'],
+        shift_worked=request.form['shift_worked'],
+        user_id=request.form['user_id']
+    )
+    print(workcompleted, 'workcompleted created from form')
+    db.session.add(workcompleted)
+    db.session.commit()
     
-    if form.validate_on_submit():  # Check form validation
-        new_choice = Employee(
-            option=form.option.data,
-            optional_text=form.optional_text.data,
-            shift_worked=form.shift_worked.data,
-            user_id=form.user_id.data        
-            )
-        db.session.add(new_choice)
-        db.session.commit()
-        return jsonify(new_choice.to_dict()), 201
+    return workcompleted.to_dict()
     
-    return jsonify({'errors': form.errors}), 400
 
 
 @employee_routes.route('/', methods=['GET'])
