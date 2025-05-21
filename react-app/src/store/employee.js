@@ -35,16 +35,16 @@ export const submitEmployee = (userId, option, shiftWorked, optionalText) => asy
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({option, shiftWorked, optionalText, userId }),
-  });  console.log(response, "response in employee store");
-  if (response.ok) {
-  
-    const data = await response.json();
-    dispatch(addEmployee(data));
 
+  });
+  const data = await response.json();
+  if (response.ok) {
+    dispatch(addEmployee(data));
+    return data;
   } else {
-    console.log('post in employee store error');
+    console.log('its the post');
   }
+
 };
 
 // Initial State

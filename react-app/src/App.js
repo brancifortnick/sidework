@@ -41,6 +41,10 @@ function App() {
         <ProtectedRoute path='/users/:userId' exact={true}>
           <User />
         </ProtectedRoute>
+        <ProtectedRoute path='/employees' exact={true}>
+          <h1>Employee List</h1>
+          <p>List of employees will go here.</p>
+        </ProtectedRoute>
         <ProtectedRoute path='/employees/submit' exact={true}>
           
           <EmployeeForm />

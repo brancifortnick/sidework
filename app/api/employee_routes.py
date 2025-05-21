@@ -1,9 +1,11 @@
 from flask import Flask, Blueprint, jsonify,request,render_template
+from flask_login import current_user
 from flask_login import login_required
 from app.models import User,db, Employee
 from flask_wtf import FlaskForm
 from app.forms.employee_form import EmployeeForm
-
+from app.api.auth_routes import validation_errors_to_error_messages
+from flask_wtf.csrf import CSRFProtect
 
 employee_routes = Blueprint('employees', __name__)
 
@@ -33,21 +35,24 @@ def get_employees():
     employees = Employee.query.all()
     return {'employees': [employee.to_dict() for employee in employees]}
 
-@employee_routes.route('/submit', methods=['POST'])
+@employee_routes.route('/submit', methods='POST')
 @login_required
 def create_location():
-    workcompleted = Employee(
-        option=request.form['option'],
-        optional_text=request.form['optional_text'],
-        shift_worked=request.form['shift_worked'],
-        user_id=request.form['user_id']
-    )
-    print(workcompleted, 'workcompleted created from form')
-    db.session.add(workcompleted)
-    db.session.commit()
+    form = EmployeeForm()
+    if form.validate_on_submit():
     
-    return workcompleted.to_dict()
-    
+        workcompleted = Employee(
+            option=request.form['option'],
+            optional_text=request.form['optional_text'],
+            shift_worked=request.form['shift_worked'],
+            user_id=current_user.id
+        )
+        form['csrf_token'].data = request.cookies['csrf_token']
+        db.session.add(workcompleted)
+        db.session.commit()
+        
+        return workcompleted.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}, 401
 
 
 @employee_routes.route('/', methods=['GET'])

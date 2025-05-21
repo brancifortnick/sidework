@@ -11,20 +11,30 @@ function EmployeeForm() {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(state => state.session.user);
+    let userId = null;
+
+    if (userId=== null && user) {
+        userId = user.id;
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        const res = await dispatch(submitEmployee(user.id, option, shiftWorked, optionalText));
-        if (res.ok) {
-            console.log(res, "data coming from employeeform");
-  
-        } else {
-            console.log('Error submitting employee');
+        const data = await dispatch(submitEmployee(userId, option, shiftWorked, optionalText));
+        if (data) {
+            history.push('/employees');
         }
+        
+      console.log('User ID:', userId);
+        console.log('Option:', option);
+        console.log('Shift Worked:', shiftWorked);
+        console.log('Optional Text:', optionalText);
+        console.log('Data:', data);
+  
     };
 
+   
     return (
-        <>
+        <div>
             <h2>Submit Employee</h2>
             <form
                 onSubmit={onSubmit}
@@ -51,7 +61,7 @@ function EmployeeForm() {
                     Submit
                 </button>
             </form>
-        </>
+        </div>
     );
 }
 
