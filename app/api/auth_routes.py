@@ -3,7 +3,8 @@ from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
-
+from flask_wtf.csrf import CSRFProtect
+import logging
 auth_routes = Blueprint('auth', __name__)
 
 
@@ -71,7 +72,9 @@ def sign_up():
     """
     Creates a new user and logs them in
     """
+    logging.info("SignUpForm data:", request.form)
     form = SignUpForm()
+    print("Form data:", form.data, SignUpForm())
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         user = User(

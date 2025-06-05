@@ -11,26 +11,9 @@ function EmployeeForm() {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(state => state.session.user);
-    let userId = null;
 
-    if (userId=== null && user) {
-        userId = user.id;
-    }
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        const data = await dispatch(submitEmployee(userId, option, shiftWorked, optionalText));
-        if (data) {
-            history.push('/employees');
-        }
-        
-      console.log('User ID:', userId);
-        console.log('Option:', option);
-        console.log('Shift Worked:', shiftWorked);
-        console.log('Optional Text:', optionalText);
-        console.log('Data:', data);
-  
-    };
+
 
    
     return (
