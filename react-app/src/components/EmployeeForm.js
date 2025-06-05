@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { submitEmployee } from '../store/employee';
+import { fetchEmployees, submitEmployee } from '../store/employee';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 function EmployeeForm() {
@@ -12,10 +12,33 @@ function EmployeeForm() {
     const history = useHistory();
     const user = useSelector(state => state.session.user);
 
+    const onSubmit = async (e) => {
+        e.preventDefault();
+       const formData = new FormData();
+        formData.append('userId', user.id);
+        formData.append('option', option);
+        formData.append('shiftWorked', shiftWorked);
+        formData.append('optionalText', optionalText);
+
+        const data = await dispatch(submitEmployee(formData));
+        if (data) {
+            history.push('/');
+        } else {
+            console.log('Error submitting employee data');
+        }
+        // Reset form fields
+        setOption('');
+        setShiftWorked('');
+        setOptionalText('');
 
 
+    }
 
-   
+    useEffect(()=> {
+        dispatch(fetchEmployees());
+    },[dispatch])
+
+
     return (
         <div>
             <h2>Submit Employee</h2>

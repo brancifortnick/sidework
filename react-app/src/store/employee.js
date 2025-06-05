@@ -20,10 +20,11 @@ const updateEmployee = (employee) => ({
 
 // Async Thunks
 export const fetchEmployees = () => async (dispatch) => {
-  const response = await fetch('/api/employee');
+  const response = await fetch('/api/employees');
   if (response.ok) {
     const data = await response.json();
-    dispatch(setEmployees(data));
+    console.log('DATAAAAAAAAA', data);
+    dispatch(setEmployees(data.employees));
   } else {
     console.log('its the get');
   }
